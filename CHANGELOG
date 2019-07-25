@@ -1,3 +1,12 @@
+########## PrettyTable 0.9 - July XX, 2019 ###########
+* updated to use python 3.6 and higher features 
+* f strings and r strings used extensively
+* remove references for Python 2.7 compatability
+* added enums for vrule, hrule and table styles
+* update tests to use pytest
+
+
+
 ########## PrettyTable 0.8 - Oct XX, 2013 ###########
 
 * New "paginate" method can be used to produce strings suitable

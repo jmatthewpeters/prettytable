@@ -43,8 +43,8 @@ import textwrap
 import unicodedata
 import enum
 
-unicode = str
-basestring = str
+#unicode = str
+#basestring = str
 itermap = map
 iterzip = zip
 uni_chr = chr
@@ -179,9 +179,9 @@ class PrettyTable(object):
         self._left_padding_width = kwargs["left_padding_width"] or None
         self._right_padding_width = kwargs["right_padding_width"] or None
 
-        self._vertical_char = kwargs["vertical_char"] or self._unicode("|")
-        self._horizontal_char = kwargs["horizontal_char"] or self._unicode("-")
-        self._junction_char = kwargs["junction_char"] or self._unicode("+")
+        self._vertical_char = kwargs["vertical_char"] or "|"
+        self._horizontal_char = kwargs["horizontal_char"] or "-"
+        self._junction_char = kwargs["junction_char"] or "+"
         
         if kwargs["print_empty"] in (True, False):
             self._print_empty = kwargs["print_empty"]
@@ -195,12 +195,12 @@ class PrettyTable(object):
         self._xhtml = kwargs["xhtml"] or False
         self._attributes = kwargs["attributes"] or {}
    
-    def _unicode(self, value):
-        if not isinstance(value, basestring):
-            value = str(value)
-        if not isinstance(value, unicode):
-            value = unicode(value, self.encoding, "strict")
-        return value
+    #def _unicode(self, value):
+    #    if not isinstance(value, basestring):
+    #        value = str(value)
+    #    if not isinstance(value, unicode):
+    #        value = unicode(value, self.encoding, "strict")
+    #    return value
 
     def _justify(self, text, width, align):
         excess = width - _str_block_width(text)
@@ -250,12 +250,12 @@ class PrettyTable(object):
         elif isinstance(index, int):
             new.add_row(self._rows[index])
         else:
-            raise Exception("Index %s is invalid, must be an integer or slice" % str(index))
+            raise Exception(f"Index {str(index)} is invalid, must be an integer or slice")
         return new
 
     
     #def __str__(self):
-    #    return self.__unicode__()
+    #    return self.get_string()
     
     #def __unicode__(self):
     #    return self.get_string()
@@ -339,7 +339,7 @@ class PrettyTable(object):
         try:
             assert int(val) >= 0
         except AssertionError:
-            raise Exception(f"Invalid value for {name}: {self._unicode(val)}!")
+            raise Exception(f"Invalid value for {name}: {str(val)}!")
 
     def _validate_true_or_false(self, name, val):
         try:
@@ -351,7 +351,7 @@ class PrettyTable(object):
         if val == "":
             return
         try:
-            assert type(val) in (str, unicode)
+            assert type(val) == str
             assert val.isdigit()
         except AssertionError:
             raise Exception(f"Invalid value for {name}!  Must be an integer format string.")
@@ -360,7 +360,7 @@ class PrettyTable(object):
         if val == "":
             return
         try:
-            assert type(val) in (str, unicode)
+            assert type(val) == str
             assert "." in val
             bits = val.split(".")
             assert len(bits) <= 2
@@ -423,7 +423,7 @@ class PrettyTable(object):
 
     @field_names.setter
     def field_names(self, val):
-        val = [self._unicode(x) for x in val]
+        val = [str(x) for x in val]
         self._validate_option("field_names", val)
         if self._field_names:
             old_names = self._field_names[:]
@@ -554,7 +554,7 @@ class PrettyTable(object):
 
     @title.setter
     def title(self, val):
-        self._title = self._unicode(val)
+        self._title = str(val)
 
     @property
     def start(self):
@@ -769,7 +769,7 @@ class PrettyTable(object):
         return self._vertical_char
     @vertical_char.setter
     def vertical_char(self, val):
-        val = self._unicode(val)
+        val = str(val)
         self._validate_option("vertical_char", val)
         self._vertical_char = val
 
@@ -783,7 +783,7 @@ class PrettyTable(object):
         return self._horizontal_char
     @horizontal_char.setter
     def horizontal_char(self, val):
-        val = self._unicode(val)
+        val = str(val)
         self._validate_option("horizontal_char", val)
         self._horizontal_char = val
 
@@ -797,7 +797,7 @@ class PrettyTable(object):
         return self._junction_char
     @junction_char.setter
     def junction_char(self, val):
-        val = self._unicode(val)
+        val = str(val)
         self._validate_option("vertical_char", val)
         self._junction_char = val
 
@@ -1009,10 +1009,10 @@ class PrettyTable(object):
 
     def _format_value(self, field, value):
         if isinstance(value, int) and field in self._int_format:
-            value = self._unicode(("%%%sd" % self._int_format[field]) % value)
+            value = str(("%%%sd" % self._int_format[field]) % value)
         elif isinstance(value, float) and field in self._float_format:
-            value = self._unicode(("%%%sf" % self._float_format[field]) % value)
-        return self._unicode(value)
+            value = str(("%%%sf" % self._float_format[field]) % value)
+        return str(value)
 
     def _compute_table_width(self, options):
         table_width = 2 if options["vrules"] in (vrule_style.FRAME, vrule_style.ALL) else 0
@@ -1180,7 +1180,7 @@ class PrettyTable(object):
         if options["border"] and options["hrules"] == hrule_style.FRAME:
             lines.append(self._hrule)
         
-        return self._unicode("\n").join(lines)
+        return str("\n").join(lines)
 
     def _stringify_hrule(self, options):
 
@@ -1445,7 +1445,7 @@ class PrettyTable(object):
 
         lines.append("</table>")
 
-        return self._unicode("\n").join(lines)
+        return str("\n").join(lines)
 
     def _get_formatted_html_string(self, options):
 
@@ -1515,7 +1515,7 @@ class PrettyTable(object):
             lines.append("    </tr>")
         lines.append("</table>")
 
-        return self._unicode("\n").join(lines)
+        return str("\n").join(lines)
 
 ##############################
 # UNICODE WIDTH FUNCTIONS    #
